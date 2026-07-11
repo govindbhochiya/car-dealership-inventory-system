@@ -50,9 +50,8 @@ public class UserService {
             throw new RuntimeException("Invalid password format");
         }
 
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Email not found"));
 
         return user;
     }
