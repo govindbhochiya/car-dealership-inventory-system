@@ -89,4 +89,23 @@ class UserServiceTest {
         // Assert
         assertEquals("Invalid email format", exception.getMessage());
     }
+    @Test
+    void shouldThrowExceptionWhenPasswordFormatIsInvalid() {
+
+        // Arrange
+        User user = new User();
+        user.setFullName("Govind");
+        user.setEmail("govind@gmail.com");
+        user.setPassword("password");
+        user.setRole("USER");
+
+        // Act
+        RuntimeException exception = assertThrows(
+                RuntimeException.class,
+                () -> userService.register(user)
+        );
+
+        // Assert
+        assertEquals("Invalid password format", exception.getMessage());
+    }
 }
