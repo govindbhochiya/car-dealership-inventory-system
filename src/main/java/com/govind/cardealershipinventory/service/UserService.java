@@ -19,9 +19,14 @@ public class UserService {
         if (user.getFullName() == null || user.getFullName().trim().isEmpty()) {
             throw new RuntimeException("Full name is required");
         }
-        if (user.getEmail() == null || !user.getEmail().contains("@")) {
+        if (isValidEmail(user.getEmail())) {
             throw new RuntimeException("Invalid email format");
         }
         return user;
+    }
+    //helper method
+    private boolean isValidEmail(String email) {
+        return email != null &&
+               email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
     }
 }
