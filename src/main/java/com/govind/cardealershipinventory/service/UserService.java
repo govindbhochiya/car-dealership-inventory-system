@@ -22,9 +22,9 @@ public class UserService {
         if (isValidEmail(user.getEmail())) {
             throw new RuntimeException("Invalid email format");
         }
-        if (user.getPassword() == null ||
-        	    !user.getPassword().matches(".*[A-Z].*")) {
-        	    throw new RuntimeException("Invalid password format");
+        if (isValidPassword(user.getPassword()))
+        {
+        	throw new RuntimeException("Invalid password format");
         }
         return user;
     }
@@ -32,5 +32,9 @@ public class UserService {
     private boolean isValidEmail(String email) {
         return email != null &&
                email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
+    }
+    private boolean isValidPassword(String password) {
+        return password != null &&
+                password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$");
     }
 }
