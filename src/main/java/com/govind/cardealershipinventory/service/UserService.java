@@ -22,6 +22,10 @@ public class UserService {
         if (isValidEmail(user.getEmail())) {
             throw new RuntimeException("Invalid email format");
         }
+        if (user.getPassword() == null ||
+        	    !user.getPassword().matches(".*[A-Z].*")) {
+        	    throw new RuntimeException("Invalid password format");
+        }
         return user;
     }
     //helper method
