@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -26,7 +28,7 @@ class UserServiceTest {
         user.setEmail("govind@gmail.com");
         user.setPassword("Password@123");
         user.setRole("USER");
-
+        when(userRepository.save(user)).thenReturn(user);
         // Act
         User registeredUser = userService.register(user);
 
@@ -131,5 +133,47 @@ class UserServiceTest {
         assertEquals("govind@gmail.com", savedUser.getEmail());
 
         verify(userRepository).save(user);
+    }
+    @Test
+    void shouldThrowExceptionWhenEmailFormatIsInvalidAtLogin() {
+
+        // Act
+        RuntimeException exception = assertThrows(
+                RuntimeException.class,
+                () -> userService.login("govindgmail.com", "Password@123")
+        );
+
+        // Assert
+        assertEquals("Invalid email format", exception.getMessage());
+    }
+    @Test
+    void shouldThrowExceptionWhenPasswordFormatIsInvalidAtLogin() {
+
+        // Act
+        RuntimeException exception = assertThrows(
+                RuntimeException.class,
+                () -> userService.login("govind@gmail.com", "password")
+        );
+
+        // Assert
+        assertEquals("Invalid password format", exception.getMessage());
+    }
+    @Test
+    void shouldLoginSuccessfullyWithValidCredentials() {
+
+        // Arrange
+        User user = new User();
+        user.setEmail("govind@gmail.com");
+        user.setPassword("Password@123");
+
+        when(userRepository.findByEmail("govind@gmail.com"))
+                .thenReturn(Optional.of(user));
+
+        // Act
+        User loggedInUser = userService.login("govind@gmail.com", "Password@123");
+
+        // Assert
+        assertNotNull(loggedInUser);
+        assertEquals("govind@gmail.com", loggedInUser.getEmail());
     }
 }

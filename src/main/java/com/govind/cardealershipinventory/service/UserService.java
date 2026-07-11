@@ -34,8 +34,13 @@ public class UserService {
         return email != null &&
                email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
     }
+    //helper method
     private boolean isValidPassword(String password) {
         return password != null &&
                 password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$");
+    }
+    //login method
+    public User login(String email, String password) {
+        return null;
     }
 }
