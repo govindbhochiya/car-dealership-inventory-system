@@ -70,4 +70,23 @@ class UserServiceTest {
         // Assert
         assertEquals("Full name is required", exception.getMessage());
     }
+    @Test
+    void shouldThrowExceptionWhenEmailFormatIsInvalid() {
+
+        // Arrange
+        User user = new User();
+        user.setFullName("Govind");
+        user.setEmail("govindgmail.com");
+        user.setPassword("password123");
+        user.setRole("USER");
+
+        // Act
+        RuntimeException exception = assertThrows(
+                RuntimeException.class,
+                () -> userService.register(user)
+        );
+
+        // Assert
+        assertEquals("Invalid email format", exception.getMessage());
+    }
 }
