@@ -16,6 +16,9 @@ public class UserService {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("Email already exists");
         }
+        if (user.getFullName() == null || user.getFullName().trim().isEmpty()) {
+            throw new RuntimeException("Full name is required");
+        }
         return user;
     }
 }
