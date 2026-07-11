@@ -1,5 +1,6 @@
 package com.govind.cardealershipinventory.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
@@ -49,5 +50,24 @@ class UserServiceTest {
         // Act & Assert
         assertThrows(RuntimeException.class,
                 () -> userService.register(user));
+    }
+    @Test
+    void shouldThrowExceptionWhenFullNameIsEmpty() {
+
+        // Arrange
+        User user = new User();
+        user.setFullName("");
+        user.setEmail("govind@gmail.com");
+        user.setPassword("password123");
+        user.setRole("USER");
+
+        // Act
+        RuntimeException exception = assertThrows(
+                RuntimeException.class,
+                () -> userService.register(user)
+        );
+
+        // Assert
+        assertEquals("Full name is required", exception.getMessage());
     }
 }
