@@ -26,7 +26,8 @@ public class UserService {
         {
         	throw new RuntimeException("Invalid password format");
         }
-        return user;
+        
+        return userRepository.save(user);
     }
     //helper method
     private boolean isValidEmail(String email) {
