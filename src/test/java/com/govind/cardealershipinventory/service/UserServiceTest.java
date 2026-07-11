@@ -3,6 +3,7 @@ package com.govind.cardealershipinventory.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ class UserServiceTest {
         User user = new User();
         user.setFullName("Govind");
         user.setEmail("govind@gmail.com");
-        user.setPassword("password123");
+        user.setPassword("Password@123");
         user.setRole("USER");
 
         // Act
@@ -41,7 +42,7 @@ class UserServiceTest {
         User user = new User();
         user.setFullName("Govind");
         user.setEmail("govind@gmail.com");
-        user.setPassword("password123");
+        user.setPassword("Password@123");
         user.setRole("USER");
 
         when(userRepository.existsByEmail("govind@gmail.com"))
@@ -58,7 +59,7 @@ class UserServiceTest {
         User user = new User();
         user.setFullName("");
         user.setEmail("govind@gmail.com");
-        user.setPassword("password123");
+        user.setPassword("Password@123");
         user.setRole("USER");
 
         // Act
@@ -77,7 +78,7 @@ class UserServiceTest {
         User user = new User();
         user.setFullName("Govind");
         user.setEmail("govindgmail.com");
-        user.setPassword("password123");
+        user.setPassword("Password@123");
         user.setRole("USER");
 
         // Act
@@ -96,7 +97,7 @@ class UserServiceTest {
         User user = new User();
         user.setFullName("Govind");
         user.setEmail("govind@gmail.com");
-        user.setPassword("password");
+        user.setPassword("Password");
         user.setRole("USER");
 
         // Act
@@ -107,5 +108,28 @@ class UserServiceTest {
 
         // Assert
         assertEquals("Invalid password format", exception.getMessage());
+    }
+    @Test
+    void shouldSaveUserWhenRegistrationIsValid() {
+
+        // Arrange
+        User user = new User();
+        user.setFullName("Govind");
+        user.setEmail("govind@gmail.com");
+        user.setPassword("Password@123");
+        user.setRole("USER");
+
+        when(userRepository.existsByEmail(user.getEmail())).thenReturn(false);
+        when(userRepository.save(user)).thenReturn(user);
+
+        // Act
+        User savedUser = userService.register(user);
+
+        // Assert
+        assertNotNull(savedUser);
+        assertEquals("Govind", savedUser.getFullName());
+        assertEquals("govind@gmail.com", savedUser.getEmail());
+
+        verify(userRepository).save(user);
     }
 }

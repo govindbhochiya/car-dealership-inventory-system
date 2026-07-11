@@ -19,10 +19,10 @@ public class UserService {
         if (user.getFullName() == null || user.getFullName().trim().isEmpty()) {
             throw new RuntimeException("Full name is required");
         }
-        if (isValidEmail(user.getEmail())) {
+        if (!isValidEmail(user.getEmail())) {
             throw new RuntimeException("Invalid email format");
         }
-        if (isValidPassword(user.getPassword()))
+        if (!isValidPassword(user.getPassword()))
         {
         	throw new RuntimeException("Invalid password format");
         }
