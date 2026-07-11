@@ -176,4 +176,21 @@ class UserServiceTest {
         assertNotNull(loggedInUser);
         assertEquals("govind@gmail.com", loggedInUser.getEmail());
     }
+    
+    @Test
+    void shouldThrowExceptionWhenEmailDoesNotExist() {
+
+        // Arrange
+        when(userRepository.findByEmail("govind@gmail.com"))
+                .thenReturn(Optional.empty());
+
+        // Act
+        RuntimeException exception = assertThrows(
+                RuntimeException.class,
+                () -> userService.login("govind@gmail.com", "Password@123")
+        );
+
+        // Assert
+        assertEquals("Email not found", exception.getMessage());
+    }
 }
