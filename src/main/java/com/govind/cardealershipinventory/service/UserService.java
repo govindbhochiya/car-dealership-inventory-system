@@ -42,13 +42,11 @@ public class UserService {
     //login method
     public User login(String email, String password) {
 
-        if (email == null ||
-                !email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+        if (!isValidEmail(email)) {
             throw new RuntimeException("Invalid email format");
         }
 
-        if (password == null ||
-                !password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
+        if (!isValidPassword(password)) {
             throw new RuntimeException("Invalid password format");
         }
 
@@ -58,4 +56,5 @@ public class UserService {
 
         return user;
     }
+
 }
