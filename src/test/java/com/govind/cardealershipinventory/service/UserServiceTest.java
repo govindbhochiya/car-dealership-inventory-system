@@ -183,6 +183,7 @@ class UserServiceTest {
         assertNotNull(loggedInUser);
         assertEquals("govind@gmail.com", loggedInUser.getEmail());
     }
+   
     @Test
     void shouldThrowExceptionWhenEmailDoesNotExist() {
 
