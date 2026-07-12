@@ -1,6 +1,7 @@
 package com.govind.cardealershipinventory.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
@@ -192,5 +193,24 @@ class UserServiceTest {
 
         // Assert
         assertEquals("Email not found", exception.getMessage());
+    }
+    @Test
+    void shouldHashPasswordBeforeSavingUser() {
+
+        // Arrange
+        User user = new User();
+        user.setFullName("Govind");
+        user.setEmail("govind@gmail.com");
+        user.setPassword("Password@123");
+        user.setRole("USER");
+
+        when(userRepository.existsByEmail(user.getEmail())).thenReturn(false);
+        when(userRepository.save(user)).thenAnswer(invocation -> invocation.getArgument(0));
+
+        // Act
+        User savedUser = userService.register(user);
+
+        // Assert
+        assertNotEquals("Password@123", savedUser.getPassword());
     }
 }
