@@ -122,8 +122,17 @@ public class VehicleService {
         vehicleRepository.deleteById(id);
     }
 
-	public Vehicle purchaseVehicle(long l) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public Vehicle purchaseVehicle(Long id) {
+
+        Vehicle vehicle = vehicleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Vehicle not found"));
+
+        if (vehicle.getQuantity() <= 0) {
+            throw new RuntimeException("Vehicle is out of stock");
+        }
+
+        vehicle.setQuantity(vehicle.getQuantity() - 1);
+
+        return vehicleRepository.save(vehicle);
+    }
 }
