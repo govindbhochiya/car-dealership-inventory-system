@@ -22,4 +22,9 @@ public class JwtService {
                 .signWith(SECRET_KEY)
                 .compact();
     }
+
+	public String extractUsername(String token) {
+		
+		return null;
+	}
 }
