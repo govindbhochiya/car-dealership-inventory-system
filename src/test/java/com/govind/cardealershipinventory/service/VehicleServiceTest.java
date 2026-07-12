@@ -809,4 +809,48 @@ class VehicleServiceTest {
             // Assert
             assertEquals("Vehicle not found", exception.getMessage());
         }
+        @Test
+        void shouldIncreaseVehicleQuantityWhenRestocked() {
+
+            Vehicle vehicle = new Vehicle();
+            vehicle.setId(1L);
+            vehicle.setQuantity(5);
+
+            when(vehicleRepository.findById(1L))
+                    .thenReturn(Optional.of(vehicle));
+
+            when(vehicleRepository.save(any(Vehicle.class)))
+                    .thenAnswer(invocation -> invocation.getArgument(0));
+
+            Vehicle result = vehicleService.restockVehicle(1L, 10);
+            assertNotNull(result);
+            assertEquals(15, result.getQuantity());
+
+            verify(vehicleRepository).save(vehicle);
+        }
+
+        @Test
+        void shouldThrowExceptionWhenVehicleDoesNotExistOnRestock() {
+
+            when(vehicleRepository.findById(100L))
+                    .thenReturn(Optional.empty());
+
+            assertThrows(RuntimeException.class,
+                    () -> vehicleService.restockVehicle(100L, 5));
+
+            verify(vehicleRepository, never()).save(any());
+        }
+
+        @Test
+        void shouldThrowExceptionWhenRestockQuantityIsZeroOrNegative() {
+
+            assertThrows(IllegalArgumentException.class,
+                    () -> vehicleService.restockVehicle(1L, 0));
+
+            assertThrows(IllegalArgumentException.class,
+                    () -> vehicleService.restockVehicle(1L, -5));
+            assertNotNull(vehicleService.restockVehicle(1L, -5));
+            verify(vehicleRepository, never()).findById(anyLong());
+        }
+
 }

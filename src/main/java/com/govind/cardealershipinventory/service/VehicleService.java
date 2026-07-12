@@ -143,4 +143,9 @@ public class VehicleService {
             throw new RuntimeException("Vehicle is out of stock");
         }
     }
+
+	public Vehicle restockVehicle(long l, int i) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
