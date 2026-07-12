@@ -715,4 +715,37 @@ class VehicleServiceTest {
             verify(vehicleRepository).findById(1L);
             verify(vehicleRepository, never()).save(any(Vehicle.class));
         }
+        @Test
+        void shouldDeleteVehicleSuccessfully() {
+
+            // Arrange
+            Long vehicleId = 1L;
+
+            when(vehicleRepository.existsById(vehicleId))
+                    .thenReturn(true);
+
+            // Act
+            vehicleService.deleteVehicle(vehicleId);
+
+            // Assert
+            verify(vehicleRepository).deleteById(vehicleId);
+        }
+        @Test
+        void shouldThrowExceptionWhenDeletingVehicleThatDoesNotExist() {
+
+            // Arrange
+            Long vehicleId = 99L;
+
+            when(vehicleRepository.existsById(vehicleId))
+                    .thenReturn(false);
+
+            // Act
+            RuntimeException exception = assertThrows(
+                    RuntimeException.class,
+                    () -> vehicleService.deleteVehicle(vehicleId)
+            );
+
+            // Assert
+            assertEquals("Vehicle not found", exception.getMessage());
+        }
 }

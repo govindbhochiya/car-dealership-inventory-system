@@ -110,4 +110,9 @@ public class VehicleService {
 
         return vehicleRepository.save(existingVehicle);
     }
+
+	public void deleteVehicle(Long vehicleId) {
+		// TODO Auto-generated method stub
+		
+	}
 }
