@@ -146,15 +146,20 @@ public class VehicleService {
 
     public Vehicle restockVehicle(Long id, int quantity) {
 
-        if (quantity <= 0) {
-            throw new IllegalArgumentException("Restock quantity must be greater than zero.");
-        }
+        validateRestockQuantity(quantity);
 
-        Vehicle vehicle = vehicleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Vehicle not found with id: " + id));
+        Vehicle vehicle = getVehicleById(id);
 
         vehicle.setQuantity(vehicle.getQuantity() + quantity);
 
         return vehicleRepository.save(vehicle);
     }
+
+    private void validateRestockQuantity(int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Restock quantity must be greater than zero.");
+        }
+    }
+
+    
 }

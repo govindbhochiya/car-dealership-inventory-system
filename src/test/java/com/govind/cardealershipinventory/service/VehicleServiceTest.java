@@ -812,6 +812,7 @@ class VehicleServiceTest {
         @Test
         void shouldIncreaseVehicleQuantityWhenRestocked() {
 
+            // Arrange
             Vehicle vehicle = new Vehicle();
             vehicle.setId(1L);
             vehicle.setQuantity(5);
@@ -822,7 +823,10 @@ class VehicleServiceTest {
             when(vehicleRepository.save(any(Vehicle.class)))
                     .thenAnswer(invocation -> invocation.getArgument(0));
 
+            // Act
             Vehicle result = vehicleService.restockVehicle(1L, 10);
+
+            // Assert
             assertNotNull(result);
             assertEquals(15, result.getQuantity());
 
@@ -832,9 +836,11 @@ class VehicleServiceTest {
         @Test
         void shouldThrowExceptionWhenVehicleDoesNotExistOnRestock() {
 
+            // Arrange
             when(vehicleRepository.findById(100L))
                     .thenReturn(Optional.empty());
 
+            // Act & Assert
             assertThrows(RuntimeException.class,
                     () -> vehicleService.restockVehicle(100L, 5));
 
@@ -844,13 +850,15 @@ class VehicleServiceTest {
         @Test
         void shouldThrowExceptionWhenRestockQuantityIsZeroOrNegative() {
 
+            // Act & Assert
             assertThrows(IllegalArgumentException.class,
                     () -> vehicleService.restockVehicle(1L, 0));
 
             assertThrows(IllegalArgumentException.class,
                     () -> vehicleService.restockVehicle(1L, -5));
-            assertNotNull(vehicleService.restockVehicle(1L, -5));
+
             verify(vehicleRepository, never()).findById(anyLong());
+            verify(vehicleRepository, never()).save(any());
         }
 
 }
