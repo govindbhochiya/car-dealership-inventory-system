@@ -60,8 +60,7 @@ public class VehicleService {
         }
     }
 
-	public List<Vehicle> getAllVehicles() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public List<Vehicle> getAllVehicles() {
+        return vehicleRepository.findAll();
+    }
 }
