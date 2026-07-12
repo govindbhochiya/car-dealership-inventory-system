@@ -18,7 +18,21 @@ public class VehicleService {
 
         validateMake(vehicle.getMake());
         validateModel(vehicle.getModel());
+        if (vehicle.getCategory() == null || vehicle.getCategory().trim().isEmpty()) {
+            throw new RuntimeException("Category is required");
+        }
 
+        if (vehicle.getPrice() == null || vehicle.getPrice().signum() <= 0) {
+            throw new RuntimeException("Price must be greater than zero");
+        }
+
+        if (vehicle.getQuantity() == null) {
+            throw new RuntimeException("Quantity is required");
+        }
+
+        if (vehicle.getQuantity() < 0) {
+            throw new RuntimeException("Quantity cannot be negative");
+        }
         return vehicleRepository.save(vehicle);
     }
 
