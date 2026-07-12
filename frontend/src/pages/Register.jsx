@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import api from "../api/api";
 
-function Login() {
-
-    const navigate = useNavigate();
+function Register() {
 
     const [user, setUser] = useState({
+        fullName: "",
         email: "",
-        password: ""
+        password: "",
+        role: "USER"
     });
 
     const [message, setMessage] = useState("");
@@ -25,20 +25,18 @@ function Login() {
 
         try {
 
-            const response = await api.post("/auth/login", user);
+            const response = await api.post("/auth/register", user);
 
-            localStorage.setItem("token", response.data.token);
-
-            setMessage("Login Successful!");
+            setMessage("Registration Successful!");
 
             console.log(response.data);
 
             setUser({
+                fullName: "",
                 email: "",
-                password: ""
+                password: "",
+                role: "USER"
             });
-
-            navigate("/");
 
         } catch (error) {
 
@@ -55,9 +53,24 @@ function Login() {
 
         <div>
 
-            <h1>User Login</h1>
+            <h1>User Registration</h1>
 
             <form onSubmit={handleSubmit}>
+
+                <div>
+
+                    <label>Full Name</label><br />
+
+                    <input
+                        type="text"
+                        name="fullName"
+                        value={user.fullName}
+                        onChange={handleChange}
+                    />
+
+                </div>
+
+                <br />
 
                 <div>
 
@@ -89,8 +102,25 @@ function Login() {
 
                 <br />
 
+                <div>
+
+                    <label>Role</label><br />
+
+                    <select
+                        name="role"
+                        value={user.role}
+                        onChange={handleChange}
+                    >
+                        <option value="USER">USER</option>
+                        <option value="ADMIN">ADMIN</option>
+                    </select>
+
+                </div>
+
+                <br />
+
                 <button type="submit">
-                    Login
+                    Register
                 </button>
 
             </form>
@@ -100,12 +130,12 @@ function Login() {
             {message && <p>{message}</p>}
 
             <p>
-                Don't have an account?
-                <Link to="/register"> Register</Link>
+                Already have an account?
+                <Link to="/login"> Login</Link>
             </p>
 
         </div>
     );
 }
 
-export default Login;
+export default Register;

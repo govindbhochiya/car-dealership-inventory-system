@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import api from "../api/api";
-
+import { useNavigate } from "react-router-dom";
 function Dashboard() {
 
     const [vehicles, setVehicles] = useState([]);
-
+    const navigate = useNavigate();
     const [search, setSearch] = useState({
         make: "",
         model: "",
@@ -96,6 +96,14 @@ function Dashboard() {
         }
 
     };
+    const handleLogout = () => {
+        // 1. Remove the authentication items
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
+
+        // 2. Send the user back to the login screen
+        navigate("/login");
+    };
     const purchaseVehicle = async (id) => {
 
         try {
@@ -125,11 +133,28 @@ function Dashboard() {
         }
 
     };
+
     return (
 
         <div>
 
             <h1>Vehicle Dashboard</h1>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+
+                <button
+                    onClick={handleLogout}
+                    style={{
+                        padding: "8px 15px",
+                        backgroundColor: "#dc3545",
+                        color: "white",
+                        border: "none",
+                        cursor: "pointer",
+                        borderRadius: "4px"
+                    }}
+                >
+                    Logout
+                </button>
+            </div>
 
             <h3>Search Vehicle</h3>
 

@@ -141,10 +141,33 @@ function Dashboard() {
         }
 
     };
+    const handleLogout = () => {
+        // 1. Remove the authentication items
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
+
+        // 2. Send the user back to the login screen
+        navigate("/login");
+    };
     return (
         <div>
             <h1>Vehicle Dashboard</h1>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 
+                <button
+                    onClick={handleLogout}
+                    style={{
+                        padding: "8px 15px",
+                        backgroundColor: "#dc3545",
+                        color: "white",
+                        border: "none",
+                        cursor: "pointer",
+                        borderRadius: "4px"
+                    }}
+                >
+                    Logout
+                </button>
+            </div>
             {/* Admin Panel containing ONLY the navigation button now */}
             {isAdmin && (
                 <div style={{ padding: "10px 0", marginBottom: "20px" }}>
