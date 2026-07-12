@@ -217,4 +217,25 @@ class UserServiceTest {
         // Assert
         assertNotEquals("Password@123", savedUser.getPassword());
     }
+    @Test
+    void shouldThrowExceptionWhenPasswordIsIncorrect() {
+
+        // Arrange
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        User user = new User();
+        user.setEmail("govind@gmail.com");
+        user.setPassword(passwordEncoder.encode("Password@123"));
+
+        when(userRepository.findByEmail("govind@gmail.com"))
+                .thenReturn(Optional.of(user));
+
+        // Act & Assert
+        RuntimeException exception = assertThrows(
+                RuntimeException.class,
+                () -> userService.login("govind@gmail.com", "WrongPassword@123")
+        );
+
+        assertEquals("Invalid password", exception.getMessage());
+    }
 }
