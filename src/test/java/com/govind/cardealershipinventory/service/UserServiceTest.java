@@ -167,9 +167,11 @@ class UserServiceTest {
     void shouldLoginSuccessfullyWithValidCredentials() {
 
         // Arrange
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
         User user = new User();
         user.setEmail("govind@gmail.com");
-        user.setPassword("Password@123");
+        user.setPassword(passwordEncoder.encode("Password@123"));
 
         when(userRepository.findByEmail("govind@gmail.com"))
                 .thenReturn(Optional.of(user));
@@ -181,7 +183,6 @@ class UserServiceTest {
         assertNotNull(loggedInUser);
         assertEquals("govind@gmail.com", loggedInUser.getEmail());
     }
-    
     @Test
     void shouldThrowExceptionWhenEmailDoesNotExist() {
 
