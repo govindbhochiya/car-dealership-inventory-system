@@ -124,15 +124,23 @@ public class VehicleService {
 
     public Vehicle purchaseVehicle(Long id) {
 
-        Vehicle vehicle = vehicleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Vehicle not found"));
+        Vehicle vehicle = getVehicleById(id);
 
-        if (vehicle.getQuantity() <= 0) {
-            throw new RuntimeException("Vehicle is out of stock");
-        }
+        validateVehicleInStock(vehicle);
 
         vehicle.setQuantity(vehicle.getQuantity() - 1);
 
         return vehicleRepository.save(vehicle);
+    }
+
+    private Vehicle getVehicleById(Long id) {
+        return vehicleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Vehicle not found"));
+    }
+
+    private void validateVehicleInStock(Vehicle vehicle) {
+        if (vehicle.getQuantity() <= 0) {
+            throw new RuntimeException("Vehicle is out of stock");
+        }
     }
 }
