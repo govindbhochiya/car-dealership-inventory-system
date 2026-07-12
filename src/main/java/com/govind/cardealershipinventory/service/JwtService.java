@@ -31,4 +31,9 @@ public class JwtService {
                 .getPayload()
                 .getSubject();
     }
+
+	public boolean isTokenValid(String token, String string) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

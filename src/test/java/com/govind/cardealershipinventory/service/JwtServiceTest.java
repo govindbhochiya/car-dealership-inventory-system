@@ -3,6 +3,7 @@ package com.govind.cardealershipinventory.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -31,5 +32,17 @@ class JwtServiceTest {
 
         // Assert
         assertEquals("govind@gmail.com", username);
+    }
+    @Test
+    void shouldValidateTokenSuccessfully() {
+
+        // Arrange
+        String token = jwtService.generateToken("govind@gmail.com");
+
+        // Act
+        boolean isValid = jwtService.isTokenValid(token, "govind@gmail.com");
+
+        // Assert
+        assertTrue(isValid);
     }
 }
