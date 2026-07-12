@@ -51,6 +51,16 @@ function AdminDashboard() {
         }
     };
 
+    const handlePurchaseVehicle = async (id) => {
+        try {
+            await api.post(`/vehicles/${id}/purchase`, {}, authConfig);
+            setMessage("Vehicle purchased successfully.");
+            loadVehicles();
+        } catch (error) {
+            setMessage(error.response?.data?.message || "Unable to purchase vehicle.");
+        }
+    };
+
     const handleRestock = async (id) => {
         const quantity = restockQuantities[id];
         if (!quantity || Number(quantity) <= 0) {
@@ -117,6 +127,7 @@ function AdminDashboard() {
                                 <p className="vehicle-id">Vehicle ID: {vehicle.id}</p>
                                 <p className="vehicle-price">₹{Number(vehicle.price || 0).toLocaleString("en-IN")}</p>
                                 <div className="admin-card-actions">
+                                    <button className="purchase-button" onClick={() => handlePurchaseVehicle(vehicle.id)} disabled={vehicle.quantity === 0}>Purchase</button>
                                     <button className="edit-button" onClick={() => navigate(`/vehicles/edit/${vehicle.id}`)}>Edit</button>
                                     <button className="delete-button" onClick={() => handleDeleteVehicle(vehicle.id)}>Delete</button>
                                 </div>
