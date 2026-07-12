@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../api/api";
 
-function Register() {
+function Login() {
+
+    const navigate = useNavigate();
 
     const [user, setUser] = useState({
-        fullName: "",
         email: "",
-        password: "",
-        role: "USER"
+        password: ""
     });
 
     const [message, setMessage] = useState("");
@@ -25,18 +25,20 @@ function Register() {
 
         try {
 
-            const response = await api.post("/auth/register", user);
+            const response = await api.post("/auth/login", user);
 
-            setMessage("Registration Successful!");
+            localStorage.setItem("token", response.data.token);
+
+            setMessage("Login Successful!");
 
             console.log(response.data);
 
             setUser({
-                fullName: "",
                 email: "",
-                password: "",
-                role: "USER"
+                password: ""
             });
+
+            navigate("/");
 
         } catch (error) {
 
@@ -53,24 +55,9 @@ function Register() {
 
         <div>
 
-            <h1>User Registration</h1>
+            <h1>User Login</h1>
 
             <form onSubmit={handleSubmit}>
-
-                <div>
-
-                    <label>Full Name</label><br />
-
-                    <input
-                        type="text"
-                        name="fullName"
-                        value={user.fullName}
-                        onChange={handleChange}
-                    />
-
-                </div>
-
-                <br />
 
                 <div>
 
@@ -102,25 +89,8 @@ function Register() {
 
                 <br />
 
-                <div>
-
-                    <label>Role</label><br />
-
-                    <select
-                        name="role"
-                        value={user.role}
-                        onChange={handleChange}
-                    >
-                        <option value="USER">USER</option>
-                        <option value="ADMIN">ADMIN</option>
-                    </select>
-
-                </div>
-
-                <br />
-
                 <button type="submit">
-                    Register
+                    Login
                 </button>
 
             </form>
@@ -130,12 +100,12 @@ function Register() {
             {message && <p>{message}</p>}
 
             <p>
-                Already have an account?
-                <Link to="/login"> Login</Link>
+                Don't have an account?
+                <Link to="/register"> Register</Link>
             </p>
 
         </div>
     );
 }
 
-export default Register;
+export default Login;
