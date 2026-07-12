@@ -245,6 +245,34 @@ cd backend
 mvn test
 ```
 
+# 🤖 My AI Usage
+
+AI tools were used as a development assistant throughout this project to improve productivity and support learning. AI was primarily used to generate initial code suggestions, create unit test templates, explain concepts, and help resolve implementation issues.
+
+### AI was used for:
+
+- Generating initial JUnit 5 and Mockito test cases for service-layer testing.
+- Assisting with Spring Security and JWT authentication setup.
+- Suggesting boilerplate code for controllers, services, DTOs, and configuration classes.
+- Helping generate React component structures and user interface layouts.
+- Assisting with CORS configuration and frontend-backend integration.
+- Providing guidance for Git commands, commit messages, and README documentation.
+- Explaining errors encountered during development and suggesting possible fixes.
+
+### My Contribution
+
+Although AI provided initial suggestions, I was responsible for:
+
+- Integrating the generated code into the project.
+- Debugging and resolving compilation and runtime errors.
+- Verifying that the generated code met the project requirements.
+- Modifying and adapting the code to fit the project architecture and business logic.
+- Implementing project-specific functionality and validating application behavior using Postman.
+- Testing the frontend and backend integration.
+- Managing the project structure, Git commits, and overall application development.
+
+AI was used as a learning and productivity tool rather than as a replacement for understanding the implementation. Every AI-generated suggestion was reviewed, tested, and modified where necessary before being included in the final project.
+
 # 📸 Application Screenshots
 
 ## Login Page
