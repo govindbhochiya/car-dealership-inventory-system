@@ -15,6 +15,15 @@ public class VehicleService {
     }
 
     public Vehicle addVehicle(Vehicle vehicle) {
-        return null;
+
+        if (vehicle.getMake() == null || vehicle.getMake().trim().isEmpty()) {
+            throw new RuntimeException("Make is required");
+        }
+
+        if (vehicle.getModel() == null || vehicle.getModel().trim().isEmpty()) {
+            throw new RuntimeException("Model is required");
+        }
+
+        return vehicleRepository.save(vehicle);
     }
 }
