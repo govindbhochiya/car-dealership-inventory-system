@@ -646,4 +646,73 @@ class VehicleServiceTest {
             verify(vehicleRepository).findById(1L);
             verify(vehicleRepository, never()).save(any(Vehicle.class));
         }
+        @Test
+        void shouldThrowExceptionWhenPriceIsLessThanOrEqualToZeroOnUpdate() {
+
+            // Arrange
+            Vehicle existingVehicle = new Vehicle();
+            existingVehicle.setId(1L);
+            existingVehicle.setMake("Honda");
+            existingVehicle.setModel("City");
+            existingVehicle.setCategory("Sedan");
+            existingVehicle.setPrice(BigDecimal.valueOf(10000));
+            existingVehicle.setQuantity(5);
+
+            Vehicle updatedVehicle = new Vehicle();
+            updatedVehicle.setMake("Toyota");
+            updatedVehicle.setModel("Corolla");
+            updatedVehicle.setCategory("Sedan");
+            updatedVehicle.setPrice(BigDecimal.ZERO);
+            updatedVehicle.setQuantity(8);
+
+            when(vehicleRepository.findById(1L))
+                    .thenReturn(Optional.of(existingVehicle));
+
+            // Act
+            RuntimeException exception = assertThrows(
+                    RuntimeException.class,
+                    () -> vehicleService.updateVehicle(1L, updatedVehicle)
+            );
+
+            // Assert
+            assertEquals("Price must be greater than zero", exception.getMessage());
+
+            verify(vehicleRepository).findById(1L);
+            verify(vehicleRepository, never()).save(any(Vehicle.class));
+        }
+
+        @Test
+        void shouldThrowExceptionWhenQuantityIsNegativeOnUpdate() {
+
+            // Arrange
+            Vehicle existingVehicle = new Vehicle();
+            existingVehicle.setId(1L);
+            existingVehicle.setMake("Honda");
+            existingVehicle.setModel("City");
+            existingVehicle.setCategory("Sedan");
+            existingVehicle.setPrice(BigDecimal.valueOf(10000));
+            existingVehicle.setQuantity(5);
+
+            Vehicle updatedVehicle = new Vehicle();
+            updatedVehicle.setMake("Toyota");
+            updatedVehicle.setModel("Corolla");
+            updatedVehicle.setCategory("Sedan");
+            updatedVehicle.setPrice(BigDecimal.valueOf(15000));
+            updatedVehicle.setQuantity(-1);
+
+            when(vehicleRepository.findById(1L))
+                    .thenReturn(Optional.of(existingVehicle));
+
+            // Act
+            RuntimeException exception = assertThrows(
+                    RuntimeException.class,
+                    () -> vehicleService.updateVehicle(1L, updatedVehicle)
+            );
+
+            // Assert
+            assertEquals("Quantity cannot be negative", exception.getMessage());
+
+            verify(vehicleRepository).findById(1L);
+            verify(vehicleRepository, never()).save(any(Vehicle.class));
+        }
 }
