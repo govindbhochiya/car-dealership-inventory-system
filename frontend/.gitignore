@@ -1,0 +1,68 @@
+############################
+# Spring Boot / Maven
+############################
+
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+############################
+# Eclipse
+############################
+
+.project
+.classpath
+.settings/
+bin/
+
+############################
+# React / Vite
+############################
+
+node_modules/
+dist/
+dist-ssr/
+
+############################
+# Logs
+############################
+
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+############################
+# Local Environment
+############################
+
+*.local
+.env
+.env.*
+
+############################
+# VS Code / IntelliJ
+############################
+
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+############################
+# OS Files
+############################
+
+.DS_Store
+Thumbs.db
+
+############################
+# Visual Studio
+############################
+
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
