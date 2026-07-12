@@ -247,38 +247,36 @@ mvn test
 
 # 📸 Application Screenshots
 
-The following screenshots showcase the main features and user interface of the Car Dealership Inventory System.
-
 ## Login Page
 
-![Login Page](screenshots/login.png)
+![Login Page](Screenshots/login.png)
 
 ---
 
 ## Register Page
 
-![Register Page](screenshots/RegisterPage.png)
+![Register Page](Screenshots/RegisterPage.png)
 
 ---
 
 ## Admin Dashboard
 
-![Admin Dashboard](screenshots/AdminDashboard.png)
+![Admin Dashboard](Screenshots/AdminDashboard.png)
 
 ---
 
 ## User Dashboard
 
-![User Dashboard](screenshots/UserDashboard.png)
+![User Dashboard](Screenshots/UserDashboard.png)
 
 ---
 
 ## Add Vehicle
 
-![Add Vehicle](screenshots/AddVehicle.png)
+![Add Vehicle](Screenshots/AddVehicle.png)
 
 ---
 
 ## Edit Vehicle
 
-![Edit Vehicle](screenshots/Editpage.png)
+![Edit Vehicle](Screenshots/Editpage.png)
