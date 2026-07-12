@@ -22,9 +22,13 @@ public class JwtService {
                 .signWith(SECRET_KEY)
                 .compact();
     }
-
-	public String extractUsername(String token) {
-		
-		return null;
-	}
+   
+    public String extractUsername(String token) {
+        return Jwts.parser()
+                .verifyWith(SECRET_KEY)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
+    }
 }
