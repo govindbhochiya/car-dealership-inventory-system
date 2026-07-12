@@ -1,5 +1,7 @@
 package com.govind.cardealershipinventory.service;
 
+import java.math.BigDecimal;
+
 import org.springframework.stereotype.Service;
 
 import com.govind.cardealershipinventory.entity.Vehicle;
@@ -18,21 +20,9 @@ public class VehicleService {
 
         validateMake(vehicle.getMake());
         validateModel(vehicle.getModel());
-        if (vehicle.getCategory() == null || vehicle.getCategory().trim().isEmpty()) {
-            throw new RuntimeException("Category is required");
-        }
-
-        if (vehicle.getPrice() == null || vehicle.getPrice().signum() <= 0) {
-            throw new RuntimeException("Price must be greater than zero");
-        }
-
-        if (vehicle.getQuantity() == null) {
-            throw new RuntimeException("Quantity is required");
-        }
-
-        if (vehicle.getQuantity() < 0) {
-            throw new RuntimeException("Quantity cannot be negative");
-        }
+        validateCategory(vehicle.getCategory());
+        validatePrice(vehicle.getPrice());
+        validateQuantity(vehicle.getQuantity());
         return vehicleRepository.save(vehicle);
     }
 
@@ -45,6 +35,27 @@ public class VehicleService {
     private void validateModel(String model) {
         if (model == null || model.trim().isEmpty()) {
             throw new RuntimeException("Model is required");
+        }
+    }
+    private void validateCategory(String category) {
+        if (category == null || category.trim().isEmpty()) {
+            throw new RuntimeException("Category is required");
+        }
+    }
+
+    private void validatePrice(BigDecimal price) {
+        if (price == null || price.signum() <= 0) {
+            throw new RuntimeException("Price must be greater than zero");
+        }
+    }
+
+    private void validateQuantity(Integer quantity) {
+        if (quantity == null) {
+            throw new RuntimeException("Quantity is required");
+        }
+
+        if (quantity < 0) {
+            throw new RuntimeException("Quantity cannot be negative");
         }
     }
 }
