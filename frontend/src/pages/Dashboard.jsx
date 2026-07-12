@@ -96,7 +96,35 @@ function Dashboard() {
         }
 
     };
+    const purchaseVehicle = async (id) => {
 
+        try {
+
+            await api.post(
+                `/vehicles/${id}/purchase`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
+                }
+            );
+
+            setMessage("Vehicle purchased successfully.");
+
+            loadVehicles();
+
+        } catch (error) {
+
+            if (error.response) {
+                setMessage(error.response.data.message);
+            } else {
+                setMessage("Unable to connect to server.");
+            }
+
+        }
+
+    };
     return (
 
         <div>
@@ -185,6 +213,7 @@ function Dashboard() {
                         <th>Category</th>
                         <th>Price</th>
                         <th>Quantity</th>
+                        <th>Action</th>
                     </tr>
 
                 </thead>
@@ -200,6 +229,14 @@ function Dashboard() {
                             <td>{vehicle.category}</td>
                             <td>{vehicle.price}</td>
                             <td>{vehicle.quantity}</td>
+                            <td>
+                                <button
+                                    onClick={() => purchaseVehicle(vehicle.id)}
+                                    disabled={vehicle.quantity === 0}
+                                >
+                                    Purchase
+                                </button>
+                            </td>
                         </tr>
 
                     ))}
