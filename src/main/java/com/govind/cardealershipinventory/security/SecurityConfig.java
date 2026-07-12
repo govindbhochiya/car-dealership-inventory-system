@@ -32,6 +32,9 @@ public class SecurityConfig {
             // Purchase requires authentication
             .requestMatchers(HttpMethod.POST, "/api/vehicles/*/purchase").authenticated()
 
+            // Restock requires ADMIN
+            .requestMatchers(HttpMethod.POST, "/api/vehicles/*/restock").hasRole("ADMIN")
+
             // Delete requires ADMIN
             .requestMatchers(HttpMethod.DELETE, "/api/vehicles/**").hasRole("ADMIN")
 
