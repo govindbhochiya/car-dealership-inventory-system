@@ -16,14 +16,21 @@ public class VehicleService {
 
     public Vehicle addVehicle(Vehicle vehicle) {
 
-        if (vehicle.getMake() == null || vehicle.getMake().trim().isEmpty()) {
-            throw new RuntimeException("Make is required");
-        }
-
-        if (vehicle.getModel() == null || vehicle.getModel().trim().isEmpty()) {
-            throw new RuntimeException("Model is required");
-        }
+        validateMake(vehicle.getMake());
+        validateModel(vehicle.getModel());
 
         return vehicleRepository.save(vehicle);
+    }
+
+    private void validateMake(String make) {
+        if (make == null || make.trim().isEmpty()) {
+            throw new RuntimeException("Make is required");
+        }
+    }
+
+    private void validateModel(String model) {
+        if (model == null || model.trim().isEmpty()) {
+            throw new RuntimeException("Model is required");
+        }
     }
 }
