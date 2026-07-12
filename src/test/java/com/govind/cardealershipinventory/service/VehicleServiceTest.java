@@ -79,4 +79,84 @@ class VehicleServiceTest {
         // Assert
         assertEquals("Model is required", exception.getMessage());
     }
+    @Test
+    void shouldThrowExceptionWhenCategoryIsEmpty() {
+
+        // Arrange
+        Vehicle vehicle = new Vehicle();
+        vehicle.setMake("Toyota");
+        vehicle.setModel("Fortuner");
+        vehicle.setCategory("");
+        vehicle.setPrice(new BigDecimal("4200000.00"));
+        vehicle.setQuantity(5);
+
+        // Act
+        RuntimeException exception = assertThrows(
+                RuntimeException.class,
+                () -> vehicleService.addVehicle(vehicle)
+        );
+
+        // Assert
+        assertEquals("Category is required", exception.getMessage());
+    }
+    @Test
+    void shouldThrowExceptionWhenPriceIsInvalid() {
+
+        // Arrange
+        Vehicle vehicle = new Vehicle();
+        vehicle.setMake("Toyota");
+        vehicle.setModel("Fortuner");
+        vehicle.setCategory("SUV");
+        vehicle.setPrice(BigDecimal.ZERO);
+        vehicle.setQuantity(5);
+
+        // Act
+        RuntimeException exception = assertThrows(
+                RuntimeException.class,
+                () -> vehicleService.addVehicle(vehicle)
+        );
+
+        // Assert
+        assertEquals("Price must be greater than zero", exception.getMessage());
+    }
+    @Test
+    void shouldThrowExceptionWhenQuantityIsNegative() {
+
+        // Arrange
+        Vehicle vehicle = new Vehicle();
+        vehicle.setMake("Toyota");
+        vehicle.setModel("Fortuner");
+        vehicle.setCategory("SUV");
+        vehicle.setPrice(new BigDecimal("4200000.00"));
+        vehicle.setQuantity(-1);
+
+        // Act
+        RuntimeException exception = assertThrows(
+                RuntimeException.class,
+                () -> vehicleService.addVehicle(vehicle)
+        );
+
+        // Assert
+        assertEquals("Quantity cannot be negative", exception.getMessage());
+    }
+    @Test
+    void shouldThrowExceptionWhenQuantityIsNull() {
+
+        // Arrange
+        Vehicle vehicle = new Vehicle();
+        vehicle.setMake("Toyota");
+        vehicle.setModel("Fortuner");
+        vehicle.setCategory("SUV");
+        vehicle.setPrice(new BigDecimal("4200000.00"));
+        vehicle.setQuantity(null);
+
+        // Act
+        RuntimeException exception = assertThrows(
+                RuntimeException.class,
+                () -> vehicleService.addVehicle(vehicle)
+        );
+
+        // Assert
+        assertEquals("Quantity is required", exception.getMessage());
+    }
 }
