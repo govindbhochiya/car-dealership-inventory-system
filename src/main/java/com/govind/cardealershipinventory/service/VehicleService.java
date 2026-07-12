@@ -64,8 +64,18 @@ public class VehicleService {
         return vehicleRepository.findAll();
     }
 
-	public List<Vehicle> searchVehicles(Object object, String string, Object object2, Object object3, Object object4) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public List<Vehicle> searchVehicles(
+            String make,
+            String model,
+            String category,
+            BigDecimal minPrice,
+            BigDecimal maxPrice) {
+
+        return (List<Vehicle>) vehicleRepository.searchVehicles(
+                make,
+                model,
+                category,
+                minPrice,
+                maxPrice);
+    }
 }

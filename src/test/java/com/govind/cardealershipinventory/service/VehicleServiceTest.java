@@ -356,4 +356,106 @@ class VehicleServiceTest {
             assertNotNull(result);
             assertEquals(2, result.size());
         }
+        @Test
+        void shouldReturnEmptyListWhenNoVehicleMatchesMake() {
+
+            // Arrange
+            when(vehicleRepository.searchVehicles(
+                    "BMW", null, null, null, null))
+                    .thenReturn(Collections.emptyList());
+
+            // Act
+            List<Vehicle> result = vehicleService.searchVehicles(
+                    "BMW", null, null, null, null);
+
+            // Assert
+            assertNotNull(result);
+            assertTrue(result.isEmpty());
+        }
+
+        @Test
+        void shouldReturnEmptyListWhenNoVehicleMatchesModel() {
+
+            // Arrange
+            when(vehicleRepository.searchVehicles(
+                    null, "XUV700", null, null, null))
+                    .thenReturn(Collections.emptyList());
+
+            // Act
+            List<Vehicle> result = vehicleService.searchVehicles(
+                    null, "XUV700", null, null, null);
+
+            // Assert
+            assertNotNull(result);
+            assertTrue(result.isEmpty());
+        }
+
+        @Test
+        void shouldReturnEmptyListWhenNoVehicleMatchesCategory() {
+
+            // Arrange
+            when(vehicleRepository.searchVehicles(
+                    null, null, "Truck", null, null))
+                    .thenReturn(Collections.emptyList());
+
+            // Act
+            List<Vehicle> result = vehicleService.searchVehicles(
+                    null, null, "Truck", null, null);
+
+            // Assert
+            assertNotNull(result);
+            assertTrue(result.isEmpty());
+        }
+
+        @Test
+        void shouldReturnEmptyListWhenPriceRangeHasNoMatchingVehicles() {
+
+            // Arrange
+            when(vehicleRepository.searchVehicles(
+                    null,
+                    null,
+                    null,
+                    new BigDecimal("9000000"),
+                    new BigDecimal("10000000")))
+                    .thenReturn(Collections.emptyList());
+
+            // Act
+            List<Vehicle> result = vehicleService.searchVehicles(
+                    null,
+                    null,
+                    null,
+                    new BigDecimal("9000000"),
+                    new BigDecimal("10000000"));
+
+            // Assert
+            assertNotNull(result);
+            assertTrue(result.isEmpty());
+        }
+
+        @Test
+        void shouldReturnEmptyListWhenNoVehicleMatchesMultipleFilters() {
+
+            // Arrange
+            when(vehicleRepository.searchVehicles(
+                    "BMW",
+                    "X5",
+                    "SUV",
+                    new BigDecimal("1000000"),
+                    new BigDecimal("1500000")))
+                    .thenReturn(Collections.emptyList());
+
+            // Act
+            List<Vehicle> result = vehicleService.searchVehicles(
+                    "BMW",
+                    "X5",
+                    "SUV",
+                    new BigDecimal("1000000"),
+                    new BigDecimal("1500000"));
+
+            // Assert
+            assertNotNull(result);
+            assertTrue(result.isEmpty());
+        }
+
+       
 }
