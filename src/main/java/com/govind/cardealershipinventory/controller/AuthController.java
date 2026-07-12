@@ -5,18 +5,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.govind.cardealershipinventory.entity.LoginRequest;
+import com.govind.cardealershipinventory.dto.LoginRequest;
+import com.govind.cardealershipinventory.dto.LoginResponse;
 import com.govind.cardealershipinventory.entity.User;
 import com.govind.cardealershipinventory.service.UserService;
+import com.govind.cardealershipinventory.service.JwtService;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final UserService userService;
 
-    public AuthController(UserService userService) {
+    private final UserService userService;
+    private final JwtService jwtService;
+
+    public AuthController(UserService userService,
+                          JwtService jwtService) {
         this.userService = userService;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/register")
@@ -25,7 +31,15 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public User login(@RequestBody LoginRequest request) {
-        return userService.login(request.getEmail(), request.getPassword());
+    public LoginResponse login(@RequestBody LoginRequest request) {
+
+        User user = userService.login(
+                request.getEmail(),
+                request.getPassword());
+
+        String token = jwtService.generateToken(user.getEmail());
+
+        return new LoginResponse(token);
     }
+    
 }

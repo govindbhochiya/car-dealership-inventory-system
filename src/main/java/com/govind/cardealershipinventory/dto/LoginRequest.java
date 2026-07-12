@@ -1,4 +1,4 @@
-package com.govind.cardealershipinventory.entity;
+package com.govind.cardealershipinventory.dto;
 
 public class LoginRequest {
 
