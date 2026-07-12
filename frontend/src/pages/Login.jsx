@@ -1,96 +1,62 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../api/api";
+import "./Login.css";
 
 function Login() {
     const navigate = useNavigate();
+    const [formData, setFormData] = useState({ email: "", password: "" });
+    const [message, setMessage] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const [formData, setFormData] = useState({
-        email: "",
-        password: "",
-    });
-
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
+    const handleChange = (event) => {
+        setFormData({ ...formData, [event.target.name]: event.target.value });
+        setMessage("");
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        setIsSubmitting(true);
 
         try {
+            const response = await api.post("/auth/login", formData);
+            const data = response.data;
 
-            const response = await fetch("http://localhost:8080/api/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData),
-            });
-
-            if (!response.ok) {
-                throw new Error("Invalid email or password");
-            }
-
-            const data = await response.json();
-
-            console.log(data);
-
-            // Save token and role
             localStorage.setItem("token", data.token);
             localStorage.setItem("role", data.role);
-
-            alert("Login Successful!");
-
-            // Redirect based on role
-            if (data.role === "ADMIN") {
-                navigate("/admin/dashboard");
-            } else {
-                navigate("/dashboard");
-            }
-
+            navigate(data.role === "ADMIN" ? "/admin/dashboard" : "/dashboard");
         } catch (error) {
-            alert(error.message);
+            setMessage(error.response?.data?.message || "Invalid email or password.");
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
     return (
-        <div className="container mt-5" style={{ maxWidth: "400px" }}>
-            <div className="card shadow p-4">
-                <h2 className="text-center mb-4">Login</h2>
+        <main className="login-page">
+            <section className="login-card">
+                <div className="form-header">
+                    <h1>Welcome back</h1>
+                    <p>Log in to access the vehicle inventory system.</p>
+                </div>
 
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-3">
-                        <label>Email</label>
-                        <input
-                            type="email"
-                            name="email"
-                            className="form-control"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
+                <form onSubmit={handleSubmit} className="login-form">
+                    <label htmlFor="email">Email Address</label>
+                    <input id="email" type="email" name="email" placeholder="Enter your email" value={formData.email} onChange={handleChange} required />
 
-                    <div className="mb-3">
-                        <label>Password</label>
-                        <input
-                            type="password"
-                            name="password"
-                            className="form-control"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
+                    <label htmlFor="password">Password</label>
+                    <input id="password" type="password" name="password" placeholder="Enter your password" value={formData.password} onChange={handleChange} required />
 
-                    <button className="btn btn-primary w-100">
-                        Login
+                    {message && <p className="form-message">{message}</p>}
+
+                    <button type="submit" disabled={isSubmitting}>
+                        {isSubmitting ? "Logging in..." : "Login"}
                     </button>
                 </form>
-            </div>
-        </div>
+
+                <p className="register-link">Don't have an account? <Link to="/register">Register</Link></p>
+            </section>
+        </main>
     );
 }
 

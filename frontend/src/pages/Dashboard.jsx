@@ -1,277 +1,115 @@
 import { useEffect, useState } from "react";
 import api from "../api/api";
 import { useNavigate } from "react-router-dom";
+import "./Dashboard.css";
+
 function Dashboard() {
-
     const [vehicles, setVehicles] = useState([]);
-    const navigate = useNavigate();
-    const [search, setSearch] = useState({
-        make: "",
-        model: "",
-        category: "",
-        minPrice: "",
-        maxPrice: ""
-    });
-
+    const [search, setSearch] = useState({ make: "", model: "", category: "", minPrice: "", maxPrice: "" });
     const [message, setMessage] = useState("");
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        loadVehicles();
-    }, []);
+    useEffect(() => { loadVehicles(); }, []);
 
     const loadVehicles = async () => {
-
         try {
-
-            const response = await api.get("/vehicles", {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
-                }
-            });
-
+            const response = await api.get("/vehicles", { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
             setVehicles(response.data);
-
+            setMessage("");
         } catch (error) {
-
-            if (error.response) {
-                setMessage(error.response.data.message);
-            } else {
-                setMessage("Unable to connect to server.");
-            }
-
+            setMessage(error.response?.data?.message || "Unable to connect to server.");
         }
-
     };
 
-    const handleSearchChange = (e) => {
-        setSearch({
-            ...search,
-            [e.target.name]: e.target.value
-        });
-    };
+    const handleSearchChange = (event) => setSearch({ ...search, [event.target.name]: event.target.value });
 
-    const handleSearch = async () => {
-
+    const handleSearch = async (event) => {
+        event.preventDefault();
         try {
-
             const params = {};
-
-            if (search.make.trim()) {
-                params.make = search.make.trim();
-            }
-
-            if (search.model.trim()) {
-                params.model = search.model.trim();
-            }
-
-            if (search.category.trim()) {
-                params.category = search.category.trim();
-            }
-
-            if (search.minPrice) {
-                params.minPrice = search.minPrice;
-            }
-
-            if (search.maxPrice) {
-                params.maxPrice = search.maxPrice;
-            }
-
-            const response = await api.get("/vehicles/search", {
-                params,
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
-                }
+            Object.entries(search).forEach(([key, value]) => {
+                if (String(value).trim()) params[key] = String(value).trim();
             });
-
+            const response = await api.get("/vehicles/search", { params, headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
             setVehicles(response.data);
-
+            setMessage("");
         } catch (error) {
-
-            if (error.response) {
-                setMessage(error.response.data.message);
-            } else {
-                setMessage("Unable to connect to server.");
-            }
-
+            setMessage(error.response?.data?.message || "Unable to connect to server.");
         }
-
     };
+
+    const purchaseVehicle = async (id) => {
+        try {
+            await api.post(`/vehicles/${id}/purchase`, {}, { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
+            setMessage("Vehicle purchased successfully.");
+            loadVehicles();
+        } catch (error) {
+            setMessage(error.response?.data?.message || "Unable to connect to server.");
+        }
+    };
+
     const handleLogout = () => {
-        // 1. Remove the authentication items
         localStorage.removeItem("token");
         localStorage.removeItem("role");
-
-        // 2. Send the user back to the login screen
         navigate("/login");
-    };
-    const purchaseVehicle = async (id) => {
-
-        try {
-
-            await api.post(
-                `/vehicles/${id}/purchase`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`
-                    }
-                }
-            );
-
-            setMessage("Vehicle purchased successfully.");
-
-            loadVehicles();
-
-        } catch (error) {
-
-            if (error.response) {
-                setMessage(error.response.data.message);
-            } else {
-                setMessage("Unable to connect to server.");
-            }
-
-        }
-
     };
 
     return (
+        <main className="dashboard-page">
+            <header className="dashboard-header">
+                <div>
+                    <p className="page-label">Vehicle Inventory</p>
+                    <h1>Available Vehicles</h1>
+                    <p className="header-description">Browse available vehicles and make a purchase.</p>
+                </div>
+                <button className="logout-button" onClick={handleLogout}>Logout</button>
+            </header>
 
-        <div>
+            <section className="search-section">
+                <div className="section-title">
+                    <h2>Search Vehicles</h2>
+                    <button className="clear-button" type="button" onClick={() => { setSearch({ make: "", model: "", category: "", minPrice: "", maxPrice: "" }); loadVehicles(); }}>Clear filters</button>
+                </div>
+                <form className="search-form" onSubmit={handleSearch}>
+                    <input type="text" name="make" placeholder="Make" value={search.make} onChange={handleSearchChange} />
+                    <input type="text" name="model" placeholder="Model" value={search.model} onChange={handleSearchChange} />
+                    <input type="text" name="category" placeholder="Category" value={search.category} onChange={handleSearchChange} />
+                    <input type="number" name="minPrice" placeholder="Min price" value={search.minPrice} onChange={handleSearchChange} min="0" />
+                    <input type="number" name="maxPrice" placeholder="Max price" value={search.maxPrice} onChange={handleSearchChange} min="0" />
+                    <button type="submit">Search</button>
+                </form>
+            </section>
 
-            <h1>Vehicle Dashboard</h1>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            {message && <p className="dashboard-message">{message}</p>}
 
-                <button
-                    onClick={handleLogout}
-                    style={{
-                        padding: "8px 15px",
-                        backgroundColor: "#dc3545",
-                        color: "white",
-                        border: "none",
-                        cursor: "pointer",
-                        borderRadius: "4px"
-                    }}
-                >
-                    Logout
-                </button>
-            </div>
+            <section className="inventory-section">
+                <div className="inventory-heading"><h2>Inventory</h2><span>{vehicles.length} vehicle{vehicles.length !== 1 ? "s" : ""} found</span></div>
 
-            <h3>Search Vehicle</h3>
-
-            <div>
-
-                <input
-                    type="text"
-                    name="make"
-                    placeholder="Make"
-                    value={search.make}
-                    onChange={handleSearchChange}
-                />
-
-                <br /><br />
-
-                <input
-                    type="text"
-                    name="model"
-                    placeholder="Model"
-                    value={search.model}
-                    onChange={handleSearchChange}
-                />
-
-                <br /><br />
-
-                <input
-                    type="text"
-                    name="category"
-                    placeholder="Category"
-                    value={search.category}
-                    onChange={handleSearchChange}
-                />
-
-                <br /><br />
-
-                <input
-                    type="number"
-                    name="minPrice"
-                    placeholder="Minimum Price"
-                    value={search.minPrice}
-                    onChange={handleSearchChange}
-                />
-
-                <br /><br />
-
-                <input
-                    type="number"
-                    name="maxPrice"
-                    placeholder="Maximum Price"
-                    value={search.maxPrice}
-                    onChange={handleSearchChange}
-                />
-
-                <br /><br />
-
-                <button onClick={handleSearch}>
-                    Search
-                </button>
-
-                <button
-                    onClick={loadVehicles}
-                    style={{ marginLeft: "10px" }}
-                >
-                    Show All
-                </button>
-
-            </div>
-
-            <br />
-
-            {message && <p>{message}</p>}
-            <p>Total Vehicles: {vehicles.length}</p>
-            <table border="1" cellPadding="10">
-
-                <thead>
-
-                    <tr>
-                        <th>ID</th>
-                        <th>Make</th>
-                        <th>Model</th>
-                        <th>Category</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Action</th>
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    {vehicles.map((vehicle) => (
-
-                        <tr key={vehicle.id}>
-                            <td>{vehicle.id}</td>
-                            <td>{vehicle.make}</td>
-                            <td>{vehicle.model}</td>
-                            <td>{vehicle.category}</td>
-                            <td>{vehicle.price}</td>
-                            <td>{vehicle.quantity}</td>
-                            <td>
-                                <button
-                                    onClick={() => purchaseVehicle(vehicle.id)}
-                                    disabled={vehicle.quantity === 0}
-                                >
-                                    Purchase
-                                </button>
-                            </td>
-                        </tr>
-
-                    ))}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
+                {vehicles.length === 0 ? (
+                    <div className="empty-state"><h3>No vehicles found</h3><p>Try changing your search filters.</p></div>
+                ) : (
+                    <div className="vehicle-grid">
+                        {vehicles.map((vehicle) => (
+                            <article className="vehicle-card" key={vehicle.id}>
+                                <div className="vehicle-image"><span>{vehicle.make?.charAt(0) || "V"}</span></div>
+                                <div className="vehicle-content">
+                                    <p className="vehicle-category">{vehicle.category || "Vehicle"}</p>
+                                    <h3>{vehicle.make} {vehicle.model}</h3>
+                                    <div className="vehicle-details">
+                                        <span>Vehicle ID: {vehicle.id}</span>
+                                        <span className={vehicle.quantity > 0 ? "in-stock" : "out-of-stock"}>{vehicle.quantity > 0 ? `${vehicle.quantity} in stock` : "Out of stock"}</span>
+                                    </div>
+                                    <div className="card-footer">
+                                        <strong>₹{Number(vehicle.price || 0).toLocaleString("en-IN")}</strong>
+                                        <button onClick={() => purchaseVehicle(vehicle.id)} disabled={vehicle.quantity === 0}>Purchase</button>
+                                    </div>
+                                </div>
+                            </article>
+                        ))}
+                    </div>
+                )}
+            </section>
+        </main>
     );
 }
 

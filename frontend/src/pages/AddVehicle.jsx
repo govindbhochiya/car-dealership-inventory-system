@@ -1,53 +1,55 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
+import "./VehicleForm.css";
 
 function AddVehicle() {
     const [form, setForm] = useState({ make: "", model: "", category: "", price: "", quantity: "" });
     const [message, setMessage] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
 
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+    const handleChange = (event) => {
+        setForm({ ...form, [event.target.name]: event.target.value });
+        setMessage("");
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        setIsSubmitting(true);
         try {
-            await api.post("/vehicles", form, {
-                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-            });
-            // Redirect back to dashboard immediately
-            //if user  then user dash board or admin dashboard
-            const userRole = localStorage.getItem("role");
-            if (userRole === "ADMIN") {
-                navigate("/admin/dashboard");
-            } else {
-                navigate("/dashboard");
-            }
+            await api.post("/vehicles", form, { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
+            navigate("/admin/dashboard");
         } catch (error) {
-            if (error.response) {
-                setMessage(error.response.data.message);
-            } else {
-                setMessage("Unable to connect to server.");
-            }
+            setMessage(error.response?.data?.message || "Unable to save vehicle.");
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
     return (
-        <div>
-            <h2>Add Vehicle</h2>
-            {message && <p style={{ color: "red" }}>{message}</p>}
-            <form onSubmit={handleSubmit}>
-                <input type="text" name="make" placeholder="Make" value={form.make} onChange={handleChange} required /><br /><br />
-                <input type="text" name="model" placeholder="Model" value={form.model} onChange={handleChange} required /><br /><br />
-                <input type="text" name="category" placeholder="Category" value={form.category} onChange={handleChange} required /><br /><br />
-                <input type="number" name="price" placeholder="Price" value={form.price} onChange={handleChange} required /><br /><br />
-                <input type="number" name="quantity" placeholder="Quantity" value={form.quantity} onChange={handleChange} required /><br /><br />
-                <button type="submit">Save Vehicle</button>
-                <button type="button" onClick={() => navigate("/dashboard")} style={{ marginLeft: "10px" }}>Cancel</button>
-            </form>
-        </div>
+        <main className="vehicle-form-page">
+            <section className="vehicle-form-card">
+                <div className="vehicle-form-header">
+                    <p className="page-label">Administration</p>
+                    <h1>Add Vehicle</h1>
+                    <p>Add a new vehicle to the inventory.</p>
+                </div>
+                <form onSubmit={handleSubmit} className="vehicle-form">
+                    <div className="field-grid">
+                        <div><label htmlFor="make">Make</label><input id="make" type="text" name="make" placeholder="e.g. Toyota" value={form.make} onChange={handleChange} required /></div>
+                        <div><label htmlFor="model">Model</label><input id="model" type="text" name="model" placeholder="e.g. Camry" value={form.model} onChange={handleChange} required /></div>
+                    </div>
+                    <div><label htmlFor="category">Category</label><input id="category" type="text" name="category" placeholder="e.g. Sedan" value={form.category} onChange={handleChange} required /></div>
+                    <div className="field-grid">
+                        <div><label htmlFor="price">Price</label><input id="price" type="number" name="price" placeholder="Enter price" value={form.price} onChange={handleChange} min="0" required /></div>
+                        <div><label htmlFor="quantity">Quantity</label><input id="quantity" type="number" name="quantity" placeholder="Enter quantity" value={form.quantity} onChange={handleChange} min="0" required /></div>
+                    </div>
+                    {message && <p className="vehicle-form-message">{message}</p>}
+                    <div className="form-actions"><button className="secondary-button" type="button" onClick={() => navigate("/admin/dashboard")}>Cancel</button><button className="primary-button" type="submit" disabled={isSubmitting}>{isSubmitting ? "Saving..." : "Save Vehicle"}</button></div>
+                </form>
+            </section>
+        </main>
     );
 }
 

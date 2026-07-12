@@ -1,140 +1,72 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/api";
+import "./Register.css";
 
 function Register() {
-
     const [user, setUser] = useState({
         fullName: "",
         email: "",
         password: "",
         role: "USER"
     });
-
     const [message, setMessage] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleChange = (e) => {
-        setUser({
-            ...user,
-            [e.target.name]: e.target.value
-        });
+    const handleChange = (event) => {
+        setUser({ ...user, [event.target.name]: event.target.value });
+        setMessage("");
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        setIsSubmitting(true);
 
         try {
-
-            const response = await api.post("/auth/register", user);
-
-            setMessage("Registration Successful!");
-
-            console.log(response.data);
-
-            setUser({
-                fullName: "",
-                email: "",
-                password: "",
-                role: "USER"
-            });
-
+            await api.post("/auth/register", user);
+            setMessage("Registration successful. You can now log in.");
+            setUser({ fullName: "", email: "", password: "", role: "USER" });
         } catch (error) {
-
-            if (error.response) {
-                setMessage(error.response.data.message);
-            } else {
-                setMessage("Unable to connect to server.");
-            }
-
+            setMessage(error.response?.data?.message || "Unable to connect to server.");
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
     return (
-
-        <div>
-
-            <h1>User Registration</h1>
-
-            <form onSubmit={handleSubmit}>
-
-                <div>
-
-                    <label>Full Name</label><br />
-
-                    <input
-                        type="text"
-                        name="fullName"
-                        value={user.fullName}
-                        onChange={handleChange}
-                    />
-
+        <main className="register-page">
+            <section className="register-card">
+                <div className="form-header">
+                    <h2>Create an account</h2>
+                    <p>Enter your details to register for the system.</p>
                 </div>
 
-                <br />
+                <form onSubmit={handleSubmit} className="register-form">
+                    <label htmlFor="fullName">Full Name</label>
+                    <input id="fullName" type="text" name="fullName" placeholder="Enter your full name" value={user.fullName} onChange={handleChange} required />
 
-                <div>
+                    <label htmlFor="email">Email Address</label>
+                    <input id="email" type="email" name="email" placeholder="Enter your email" value={user.email} onChange={handleChange} required />
 
-                    <label>Email</label><br />
+                    <label htmlFor="password">Password</label>
+                    <input id="password" type="password" name="password" placeholder="Enter your password" value={user.password} onChange={handleChange} minLength="6" required />
 
-                    <input
-                        type="email"
-                        name="email"
-                        value={user.email}
-                        onChange={handleChange}
-                    />
-
-                </div>
-
-                <br />
-
-                <div>
-
-                    <label>Password</label><br />
-
-                    <input
-                        type="password"
-                        name="password"
-                        value={user.password}
-                        onChange={handleChange}
-                    />
-
-                </div>
-
-                <br />
-
-                <div>
-
-                    <label>Role</label><br />
-
-                    <select
-                        name="role"
-                        value={user.role}
-                        onChange={handleChange}
-                    >
-                        <option value="USER">USER</option>
-                        <option value="ADMIN">ADMIN</option>
+                    <label htmlFor="role">Role</label>
+                    <select id="role" name="role" value={user.role} onChange={handleChange}>
+                        <option value="USER">User</option>
+                        <option value="ADMIN">Admin</option>
                     </select>
 
-                </div>
+                    {message && <p className="form-message">{message}</p>}
 
-                <br />
+                    <button type="submit" disabled={isSubmitting}>
+                        {isSubmitting ? "Registering..." : "Create Account"}
+                    </button>
+                </form>
 
-                <button type="submit">
-                    Register
-                </button>
-
-            </form>
-
-            <br />
-
-            {message && <p>{message}</p>}
-
-            <p>
-                Already have an account?
-                <Link to="/login"> Login</Link>
-            </p>
-
-        </div>
+                <p className="login-link">Already have an account? <Link to="/login">Login</Link></p>
+            </section>
+        </main>
     );
 }
 
