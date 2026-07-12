@@ -65,4 +65,11 @@ public class VehicleController {
 
         return ResponseEntity.ok("Vehicle deleted successfully");
     }
+    @PostMapping("/{id}/purchase")
+    public ResponseEntity<Vehicle> purchaseVehicle(@PathVariable Long id) {
+
+        Vehicle purchasedVehicle = vehicleService.purchaseVehicle(id);
+
+        return ResponseEntity.ok(purchasedVehicle);
+    }
 }

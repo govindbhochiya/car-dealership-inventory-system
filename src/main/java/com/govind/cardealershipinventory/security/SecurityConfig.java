@@ -29,14 +29,10 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
 
-            // Everyone who is logged in can view vehicles
-            .requestMatchers(HttpMethod.GET, "/api/vehicles/**").authenticated()
+            // Purchase requires authentication
+            .requestMatchers(HttpMethod.POST, "/api/vehicles/*/purchase").authenticated()
 
-            // Everyone who is logged in can add/update vehicles
-            .requestMatchers(HttpMethod.POST, "/api/vehicles/**").authenticated()
-            .requestMatchers(HttpMethod.PUT, "/api/vehicles/**").authenticated()
-
-            // Only ADMIN can delete vehicles
+            // Delete requires ADMIN
             .requestMatchers(HttpMethod.DELETE, "/api/vehicles/**").hasRole("ADMIN")
 
             .anyRequest().authenticated()
@@ -45,7 +41,6 @@ public class SecurityConfig {
             jwtAuthenticationFilter,
             UsernamePasswordAuthenticationFilter.class
         );
-
         return http.build();
     }
 
