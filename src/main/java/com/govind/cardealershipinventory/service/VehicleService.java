@@ -144,8 +144,17 @@ public class VehicleService {
         }
     }
 
-	public Vehicle restockVehicle(long l, int i) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public Vehicle restockVehicle(Long id, int quantity) {
+
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Restock quantity must be greater than zero.");
+        }
+
+        Vehicle vehicle = vehicleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Vehicle not found with id: " + id));
+
+        vehicle.setQuantity(vehicle.getQuantity() + quantity);
+
+        return vehicleRepository.save(vehicle);
+    }
 }
