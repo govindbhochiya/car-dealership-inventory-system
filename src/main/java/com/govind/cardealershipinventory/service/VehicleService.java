@@ -92,8 +92,17 @@ public class VehicleService {
         }
     }
 
-	public Vehicle updateVehicle(long l, Vehicle updatedVehicle) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public Vehicle updateVehicle(Long id, Vehicle updatedVehicle) {
+
+        Vehicle existingVehicle = vehicleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Vehicle not found"));
+
+        existingVehicle.setMake(updatedVehicle.getMake());
+        existingVehicle.setModel(updatedVehicle.getModel());
+        existingVehicle.setCategory(updatedVehicle.getCategory());
+        existingVehicle.setPrice(updatedVehicle.getPrice());
+        existingVehicle.setQuantity(updatedVehicle.getQuantity());
+
+        return vehicleRepository.save(existingVehicle);
+    }
 }
