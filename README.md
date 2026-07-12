@@ -243,8 +243,9 @@ After login, the application stores the JWT token and automatically uses it for 
 ```bash
 cd backend
 mvn test
+```
 
-#📸 Application Screenshots
+# 📸 Application Screenshots
 
 The following screenshots showcase the main features and user interface of the Car Dealership Inventory System.
 
