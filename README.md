@@ -117,3 +117,147 @@ This project helped me gain practical experience in backend development, fronten
 
 - Git
 - GitHub
+# ⚙️ Installation & Setup
+
+## 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/car-dealership-inventory-system.git
+```
+
+---
+
+## 2. Open the Project
+
+### Backend
+
+Open the backend project in **Eclipse IDE**.
+
+### Frontend
+
+Open the frontend folder in **Visual Studio Code**.
+
+---
+
+## 3. Configure the Database
+
+Create a MySQL database:
+
+```sql
+CREATE DATABASE car_dealership;
+```
+
+Open:
+
+```
+backend/src/main/resources/application.properties
+```
+
+Update the following properties:
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/car_dealership
+spring.datasource.username=root
+spring.datasource.password=YOUR_PASSWORD
+
+spring.jpa.hibernate.ddl-auto=update
+```
+
+---
+
+## 4. Start the Backend
+
+### Option 1 (Recommended)
+
+Run the Spring Boot application directly from **Eclipse** by right-clicking the main application class and selecting:
+
+```
+Run As → Spring Boot App
+```
+
+### Option 2 (Command Line)
+
+```bash
+cd backend
+mvn clean install
+mvn spring-boot:run
+```
+
+Backend runs at:
+
+```
+http://localhost:8080
+```
+
+---
+
+## 5. Start the Frontend
+
+Open a terminal inside the frontend folder.
+
+Install dependencies:
+
+```bash
+cd frontend
+npm install
+```
+
+Start the React application:
+
+If using Vite:
+
+```bash
+npm run dev
+```
+
+If using Create React App:
+
+```bash
+npm start
+```
+
+Frontend runs at:
+
+```
+http://localhost:5173
+```
+
+or
+
+```
+http://localhost:3000
+```
+
+---
+
+## 6. Login
+
+Register a new account or log in with an existing account.
+
+After login, the application stores the JWT token and automatically uses it for protected API requests.
+
+---
+
+## 7. Run Unit Tests (Optional)
+
+```bash
+cd backend
+mvn test
+
+# 📸 Application Screenshots
+
+## Login Page
+
+![Login Page](screenshots/login.png)
+
+##User Dashboard
+
+![Dashboard](screenshots/User Dashboard.png)
+
+## Add Vehicle
+
+![Add Vehicle](screenshots/add-vehicle.png)
+
+## Purchase Vehicle
+
+![Purchase Vehicle](screenshots/purchase-vehicle.png)
