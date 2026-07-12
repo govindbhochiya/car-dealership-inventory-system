@@ -97,6 +97,10 @@ public class VehicleService {
         Vehicle existingVehicle = vehicleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Vehicle not found"));
 
+        validateMake(updatedVehicle.getMake());
+        validateModel(updatedVehicle.getModel());
+        validateCategory(updatedVehicle.getCategory());
+
         existingVehicle.setMake(updatedVehicle.getMake());
         existingVehicle.setModel(updatedVehicle.getModel());
         existingVehicle.setCategory(updatedVehicle.getCategory());
