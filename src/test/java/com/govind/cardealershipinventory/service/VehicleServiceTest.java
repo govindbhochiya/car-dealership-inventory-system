@@ -191,4 +191,169 @@ class VehicleServiceTest {
         assertTrue(result.isEmpty());
         verify(vehicleRepository).findAll();
     }
+    
+        @Test
+        void shouldReturnVehiclesWhenSearchByMake() {
+
+            // Arrange
+            Vehicle vehicle = new Vehicle();
+            vehicle.setMake("Toyota");
+
+            List<Vehicle> vehicles = List.of(vehicle);
+
+            when(vehicleRepository.searchVehicles(
+                    "Toyota", null, null, null, null))
+                    .thenReturn(vehicles);
+
+            // Act
+            List<Vehicle> result = vehicleService.searchVehicles(
+                    "Toyota", null, null, null, null);
+
+            // Assert
+            assertNotNull(result);
+            assertEquals(1, result.size());
+            assertEquals("Toyota", result.get(0).getMake());
+        }
+
+        @Test
+        void shouldReturnVehiclesWhenSearchByModel() {
+
+            // Arrange
+            Vehicle vehicle = new Vehicle();
+            vehicle.setModel("Fortuner");
+
+            List<Vehicle> vehicles = List.of(vehicle);
+
+            when(vehicleRepository.searchVehicles(
+                    null, "Fortuner", null, null, null))
+                    .thenReturn(vehicles);
+
+            // Act
+            List<Vehicle> result = vehicleService.searchVehicles(
+                    null, "Fortuner", null, null, null);
+
+            // Assert
+            assertNotNull(result);
+            assertEquals(1, result.size());
+            assertEquals("Fortuner", result.get(0).getModel());
+        }
+
+        @Test
+        void shouldReturnVehiclesWhenSearchByCategory() {
+
+            // Arrange
+            Vehicle vehicle = new Vehicle();
+            vehicle.setCategory("SUV");
+
+            List<Vehicle> vehicles = List.of(vehicle);
+
+            when(vehicleRepository.searchVehicles(
+                    null, null, "SUV", null, null))
+                    .thenReturn(vehicles);
+
+            // Act
+            List<Vehicle> result = vehicleService.searchVehicles(
+                    null, null, "SUV", null, null);
+
+            // Assert
+            assertNotNull(result);
+            assertEquals(1, result.size());
+            assertEquals("SUV", result.get(0).getCategory());
+        }
+
+        @Test
+        void shouldReturnVehiclesWhenSearchByPriceRange() {
+
+            // Arrange
+            Vehicle vehicle = new Vehicle();
+            vehicle.setPrice(new BigDecimal("1500000"));
+
+            List<Vehicle> vehicles = List.of(vehicle);
+
+            when(vehicleRepository.searchVehicles(
+                    null,
+                    null,
+                    null,
+                    new BigDecimal("1000000"),
+                    new BigDecimal("2000000")))
+                    .thenReturn(vehicles);
+
+            // Act
+            List<Vehicle> result = vehicleService.searchVehicles(
+                    null,
+                    null,
+                    null,
+                    new BigDecimal("1000000"),
+                    new BigDecimal("2000000"));
+
+            // Assert
+            assertNotNull(result);
+            assertEquals(1, result.size());
+            assertEquals(new BigDecimal("1500000"), result.get(0).getPrice());
+        }
+
+        @Test
+        void shouldReturnVehiclesWhenSearchByMultipleFilters() {
+
+            // Arrange
+            Vehicle vehicle = new Vehicle();
+            vehicle.setMake("Toyota");
+            vehicle.setModel("Fortuner");
+            vehicle.setCategory("SUV");
+            vehicle.setPrice(new BigDecimal("2500000"));
+
+            List<Vehicle> vehicles = List.of(vehicle);
+
+            when(vehicleRepository.searchVehicles(
+                    "Toyota",
+                    "Fortuner",
+                    "SUV",
+                    new BigDecimal("2000000"),
+                    new BigDecimal("3000000")))
+                    .thenReturn(vehicles);
+
+            // Act
+            List<Vehicle> result = vehicleService.searchVehicles(
+                    "Toyota",
+                    "Fortuner",
+                    "SUV",
+                    new BigDecimal("2000000"),
+                    new BigDecimal("3000000"));
+
+            // Assert
+            assertNotNull(result);
+            assertEquals(1, result.size());
+
+            Vehicle found = result.get(0);
+
+            assertEquals("Toyota", found.getMake());
+            assertEquals("Fortuner", found.getModel());
+            assertEquals("SUV", found.getCategory());
+            assertEquals(new BigDecimal("2500000"), found.getPrice());
+        }
+
+        @Test
+        void shouldReturnAllVehiclesWhenNoFiltersProvided() {
+
+            // Arrange
+            Vehicle first = new Vehicle();
+            first.setMake("Toyota");
+
+            Vehicle second = new Vehicle();
+            second.setMake("Honda");
+
+            List<Vehicle> vehicles = List.of(first, second);
+
+            when(vehicleRepository.searchVehicles(
+                    null, null, null, null, null))
+                    .thenReturn(vehicles);
+
+            // Act
+            List<Vehicle> result = vehicleService.searchVehicles(
+                    null, null, null, null, null);
+
+            // Assert
+            assertNotNull(result);
+            assertEquals(2, result.size());
+        }
 }

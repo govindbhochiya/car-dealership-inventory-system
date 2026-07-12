@@ -63,4 +63,9 @@ public class VehicleService {
     public List<Vehicle> getAllVehicles() {
         return vehicleRepository.findAll();
     }
+
+	public List<Vehicle> searchVehicles(Object object, String string, Object object2, Object object3, Object object4) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
