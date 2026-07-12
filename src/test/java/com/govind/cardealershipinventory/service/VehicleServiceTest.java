@@ -766,7 +766,9 @@ class VehicleServiceTest {
             Vehicle updatedVehicle = vehicleService.purchaseVehicle(1L);
 
             // Assert
+            assertNotNull(updatedVehicle);
             assertEquals(4, updatedVehicle.getQuantity());
+           
             verify(vehicleRepository).save(vehicle);
         }
 
