@@ -1,5 +1,6 @@
 package com.govind.cardealershipinventory.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -30,5 +31,22 @@ public class VehicleController {
     @GetMapping
     public ResponseEntity<List<Vehicle>> getAllVehicles() {
         return ResponseEntity.ok(vehicleService.getAllVehicles());
+    }
+    @GetMapping("/search")
+    public ResponseEntity<List<Vehicle>> searchVehicles(
+            @RequestParam(required = false) String make,
+            @RequestParam(required = false) String model,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice) {
+
+        List<Vehicle> vehicles = vehicleService.searchVehicles(
+                make,
+                model,
+                category,
+                minPrice,
+                maxPrice);
+
+        return ResponseEntity.ok(vehicles);
     }
 }
