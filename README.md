@@ -244,20 +244,40 @@ After login, the application stores the JWT token and automatically uses it for 
 cd backend
 mvn test
 
-# 📸 Application Screenshots
+#📸 Application Screenshots
+
+The following screenshots showcase the main features and user interface of the Car Dealership Inventory System.
 
 ## Login Page
 
 ![Login Page](screenshots/login.png)
 
-##User Dashboard
+---
 
-![Dashboard](screenshots/User Dashboard.png)
+## Register Page
+
+![Register Page](screenshots/RegisterPage.png)
+
+---
+
+## Admin Dashboard
+
+![Admin Dashboard](screenshots/AdminDashboard.png)
+
+---
+
+## User Dashboard
+
+![User Dashboard](screenshots/UserDashboard.png)
+
+---
 
 ## Add Vehicle
 
-![Add Vehicle](screenshots/add-vehicle.png)
+![Add Vehicle](screenshots/AddVehicle.png)
 
-## Purchase Vehicle
+---
 
-![Purchase Vehicle](screenshots/purchase-vehicle.png)
+## Edit Vehicle
+
+![Edit Vehicle](screenshots/Editpage.png)
