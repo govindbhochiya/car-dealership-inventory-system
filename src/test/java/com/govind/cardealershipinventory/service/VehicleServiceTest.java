@@ -457,5 +457,23 @@ class VehicleServiceTest {
             assertTrue(result.isEmpty());
         }
 
-       
+        @Test
+        void shouldThrowExceptionWhenMinimumPriceIsGreaterThanMaximumPrice() {
+
+            // Act
+            RuntimeException exception = assertThrows(
+                    RuntimeException.class,
+                    () -> vehicleService.searchVehicles(
+                            null,
+                            null,
+                            null,
+                            new BigDecimal("5000000"),
+                            new BigDecimal("1000000"))
+            );
+
+            // Assert
+            assertEquals(
+                    "Minimum price cannot be greater than maximum price",
+                    exception.getMessage());
+        }
 }
