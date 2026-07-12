@@ -1,5 +1,7 @@
 package com.govind.cardealershipinventory.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,5 +26,9 @@ public class VehicleController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(savedVehicle);
+    }
+    @GetMapping
+    public ResponseEntity<List<Vehicle>> getAllVehicles() {
+        return ResponseEntity.ok(vehicleService.getAllVehicles());
     }
 }
