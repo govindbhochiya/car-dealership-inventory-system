@@ -70,7 +70,12 @@ public class VehicleService {
             String category,
             BigDecimal minPrice,
             BigDecimal maxPrice) {
-
+    	  if (minPrice != null
+    	            && maxPrice != null
+    	            && minPrice.compareTo(maxPrice) > 0) {
+    	        throw new RuntimeException(
+    	                "Minimum price cannot be greater than maximum price");
+    	    }
         return (List<Vehicle>) vehicleRepository.searchVehicles(
                 make,
                 model,
