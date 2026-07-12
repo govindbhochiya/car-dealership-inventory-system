@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -475,5 +476,70 @@ class VehicleServiceTest {
             assertEquals(
                     "Minimum price cannot be greater than maximum price",
                     exception.getMessage());
+        }
+        @Test
+        void shouldUpdateVehicleSuccessfully() {
+
+            // Arrange
+            Vehicle existingVehicle = new Vehicle(
+                    1L,
+                    "Honda",
+                    "City",
+                    "Sedan",
+                    BigDecimal.valueOf(10000),
+                    5);
+
+            Vehicle updatedVehicle = new Vehicle(
+                    null,
+                    "Toyota",
+                    "Corolla",
+                    "Sedan",
+                    BigDecimal.valueOf(15000),
+                    8);
+
+            when(vehicleRepository.findById(1L))
+                    .thenReturn(Optional.of(existingVehicle));
+
+            when(vehicleRepository.save(existingVehicle))
+                    .thenReturn(existingVehicle);
+
+            // Act
+            Vehicle result = vehicleService.updateVehicle(1L, updatedVehicle);
+
+            // Assert
+            assertNotNull(result);
+            assertEquals("Toyota", result.getMake());
+            assertEquals("Corolla", result.getModel());
+            assertEquals("Sedan", result.getCategory());
+            assertEquals(BigDecimal.valueOf(15000), result.getPrice());
+            assertEquals(8, result.getQuantity());
+
+            verify(vehicleRepository).findById(1L);
+            verify(vehicleRepository).save(existingVehicle);
+        }
+
+        @Test
+        void shouldThrowExceptionWhenVehicleDoesNotExist() {
+
+            // Arrange
+            Vehicle updatedVehicle = new Vehicle(
+                    null,
+                    "Toyota",
+                    "Corolla",
+                    "Sedan",
+                    BigDecimal.valueOf(15000),
+                    8);
+
+            when(vehicleRepository.findById(1L))
+                    .thenReturn(Optional.empty());
+
+            // Act & Assert
+            RuntimeException exception = assertThrows(
+                    RuntimeException.class,
+                    () -> vehicleService.updateVehicle(1L, updatedVehicle));
+
+            assertEquals("Vehicle not found", exception.getMessage());
+
+            verify(vehicleRepository).findById(1L);
         }
 }

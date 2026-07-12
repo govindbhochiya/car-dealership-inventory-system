@@ -91,4 +91,9 @@ public class VehicleService {
                     "Minimum price cannot be greater than maximum price");
         }
     }
+
+	public Vehicle updateVehicle(long l, Vehicle updatedVehicle) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
