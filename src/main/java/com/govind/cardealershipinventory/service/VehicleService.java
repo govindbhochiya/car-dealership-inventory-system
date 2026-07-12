@@ -110,9 +110,15 @@ public class VehicleService {
 
         return vehicleRepository.save(existingVehicle);
     }
+    //helper
+    private void validateVehicleExists(Long id) {
+        if (!vehicleRepository.existsById(id)) {
+            throw new RuntimeException("Vehicle not found");
+        }
+    }
 
-	public void deleteVehicle(Long vehicleId) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void deleteVehicle(Long id) {
+        validateVehicleExists(id);
+        vehicleRepository.deleteById(id);
+    }
 }
