@@ -11,14 +11,18 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import com.govind.cardealershipinventory.entity.User;
 import com.govind.cardealershipinventory.repository.UserRepository;
 
 class UserServiceTest {
 	UserRepository userRepository = Mockito.mock(UserRepository.class);
-   
-    private final UserService userService = new UserService(userRepository);
+	PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+	private final UserService userService =
+	        new UserService(userRepository, passwordEncoder);
+    
 
     @Test
     void shouldRegisterUserSuccessfully() {

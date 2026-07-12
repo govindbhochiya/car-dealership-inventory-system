@@ -2,16 +2,17 @@ package com.govind.cardealershipinventory.service;
 
 import com.govind.cardealershipinventory.entity.User;
 import com.govind.cardealershipinventory.repository.UserRepository;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final PasswordEncoder passwordEncoder;
+    public UserService(UserRepository userRepository,
+            PasswordEncoder passwordEncoder) {
+          this.userRepository = userRepository;
+          this.passwordEncoder = passwordEncoder;
+          }
 
     public User register(User user) {
     	  // Check if email already exists
