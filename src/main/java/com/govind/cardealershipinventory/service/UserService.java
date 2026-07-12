@@ -2,11 +2,13 @@ package com.govind.cardealershipinventory.service;
 
 import com.govind.cardealershipinventory.entity.User;
 import com.govind.cardealershipinventory.repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class UserService {
 
     private final UserRepository userRepository;
-
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -26,7 +28,7 @@ public class UserService {
         {
         	throw new RuntimeException("Invalid password format");
         }
-        
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
     //helper method
