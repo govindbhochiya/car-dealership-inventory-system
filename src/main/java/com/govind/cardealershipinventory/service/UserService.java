@@ -62,5 +62,9 @@ public class UserService {
         }
         return user;
     }
-
+  //Get Role User By Email
+    public String getRoleByEmail(String email)
+    {
+    	return userRepository.findByEmail(email).get().getRole();
+    }
 }

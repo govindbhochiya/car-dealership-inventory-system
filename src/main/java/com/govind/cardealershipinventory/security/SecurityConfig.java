@@ -33,17 +33,29 @@ public class SecurityConfig {
         .sessionManagement(session ->
             session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> auth
+
+            // Public endpoints
             .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
 
-            // Purchase requires authentication
-            .requestMatchers(HttpMethod.POST, "/api/vehicles/*/purchase").authenticated()
+            // Add vehicle - ADMIN only
+            .requestMatchers(HttpMethod.POST, "/api/vehicles").hasRole("ADMIN")
 
-            // Restock requires ADMIN
-            .requestMatchers(HttpMethod.POST, "/api/vehicles/*/restock").hasRole("ADMIN")
+            // Update vehicle - ADMIN only
+            .requestMatchers(HttpMethod.PUT, "/api/vehicles/**").hasRole("ADMIN")
 
-            // Delete requires ADMIN
+            // Delete vehicle - ADMIN only
             .requestMatchers(HttpMethod.DELETE, "/api/vehicles/**").hasRole("ADMIN")
 
+            // Restock vehicle - ADMIN only
+            .requestMatchers(HttpMethod.POST, "/api/vehicles/*/restock").hasRole("ADMIN")
+
+            // Purchase vehicle - Any authenticated user
+            .requestMatchers(HttpMethod.POST, "/api/vehicles/*/purchase").authenticated()
+
+            // View/search vehicles - Any authenticated user
+            .requestMatchers(HttpMethod.GET, "/api/vehicles/**").authenticated()
+
+            // Everything else requires authentication
             .anyRequest().authenticated()
         )
         .addFilterBefore(

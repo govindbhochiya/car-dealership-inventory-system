@@ -20,6 +20,7 @@ function Login() {
         e.preventDefault();
 
         try {
+
             const response = await fetch("http://localhost:8080/api/auth/login", {
                 method: "POST",
                 headers: {
@@ -34,12 +35,21 @@ function Login() {
 
             const data = await response.json();
 
-            // Save JWT
+            console.log(data);
+
+            // Save token and role
             localStorage.setItem("token", data.token);
+            localStorage.setItem("role", data.role);
 
             alert("Login Successful!");
 
-            navigate("/dashboard");
+            // Redirect based on role
+            if (data.role === "ADMIN") {
+                navigate("/admin/dashboard");
+            } else {
+                navigate("/dashboard");
+            }
+
         } catch (error) {
             alert(error.message);
         }

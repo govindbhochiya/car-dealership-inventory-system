@@ -38,8 +38,8 @@ public class AuthController {
                 request.getPassword());
 
         String token = jwtService.generateToken(user.getEmail());
-
-        return new LoginResponse(token);
+        String role = userService.getRoleByEmail(request.getEmail());
+        return new LoginResponse(token,role);
     }
     
 }
