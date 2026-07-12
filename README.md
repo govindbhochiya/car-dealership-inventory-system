@@ -308,3 +308,29 @@ AI was used as a learning and productivity tool rather than as a replacement for
 ## Edit Vehicle
 
 ![Edit Vehicle](Screenshots/Editpage.png)
+
+
+# 🧪 Test Report
+
+The backend service layer was tested using **JUnit 5** and **Mockito** following the **Test-Driven Development (TDD)** approach. The test suite verifies the application's core business logic, covering both successful operations and failure scenarios to ensure reliability and maintainability.
+
+## Service Test Summary
+
+| Test Class | Tests | Main Coverage | Status |
+|------------|------:|---------------|:------:|
+| `VehicleServiceTest` | **36** | Add vehicle, search vehicles, update vehicle, delete vehicle, purchase vehicle, restock vehicle, input validation, and error handling | ✅ Passed |
+| `UserServiceTest` | **12** | User registration, login, email validation, password validation, and password encryption | ✅ Passed |
+| `JwtServiceTest` | **5** | JWT token generation, username extraction, token validation, and invalid token scenarios | ✅ Passed |
+
+## Overall Test Results
+
+| Metric | Result |
+|--------|--------|
+| Total Test Classes | **3** |
+| Total Unit Tests | **53** |
+| Passed | **53** |
+| Failed | **0** |
+| Errors | **0** |
+| Skipped | **0** |
+
+**Overall Status:** ✅ All **53** unit tests passed successfully, confirming that the core service-layer functionality works as expected.
