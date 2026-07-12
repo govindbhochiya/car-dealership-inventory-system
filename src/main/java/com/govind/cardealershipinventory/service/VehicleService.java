@@ -100,7 +100,8 @@ public class VehicleService {
         validateMake(updatedVehicle.getMake());
         validateModel(updatedVehicle.getModel());
         validateCategory(updatedVehicle.getCategory());
-
+        validatePrice(updatedVehicle.getPrice());
+        validateQuantity(updatedVehicle.getQuantity());
         existingVehicle.setMake(updatedVehicle.getMake());
         existingVehicle.setModel(updatedVehicle.getModel());
         existingVehicle.setCategory(updatedVehicle.getCategory());
