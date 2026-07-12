@@ -748,4 +748,63 @@ class VehicleServiceTest {
             // Assert
             assertEquals("Vehicle not found", exception.getMessage());
         }
+        @Test
+        void shouldDecreaseQuantityWhenVehicleIsPurchased() {
+
+            // Arrange
+            Vehicle vehicle = new Vehicle();
+            vehicle.setId(1L);
+            vehicle.setQuantity(5);
+
+            when(vehicleRepository.findById(1L))
+                    .thenReturn(Optional.of(vehicle));
+
+            when(vehicleRepository.save(any(Vehicle.class)))
+                    .thenAnswer(invocation -> invocation.getArgument(0));
+
+            // Act
+            Vehicle updatedVehicle = vehicleService.purchaseVehicle(1L);
+
+            // Assert
+            assertEquals(4, updatedVehicle.getQuantity());
+            verify(vehicleRepository).save(vehicle);
+        }
+
+        @Test
+        void shouldThrowExceptionWhenVehicleIsOutOfStock() {
+
+            // Arrange
+            Vehicle vehicle = new Vehicle();
+            vehicle.setId(1L);
+            vehicle.setQuantity(0);
+
+            when(vehicleRepository.findById(1L))
+                    .thenReturn(Optional.of(vehicle));
+
+            // Act
+            RuntimeException exception = assertThrows(
+                    RuntimeException.class,
+                    () -> vehicleService.purchaseVehicle(1L)
+            );
+
+            // Assert
+            assertEquals("Vehicle is out of stock", exception.getMessage());
+        }
+
+        @Test
+        void shouldThrowExceptionWhenVehicleDoesNotExistOnPurchase() {
+
+            // Arrange
+            when(vehicleRepository.findById(1L))
+                    .thenReturn(Optional.empty());
+
+            // Act
+            RuntimeException exception = assertThrows(
+                    RuntimeException.class,
+                    () -> vehicleService.purchaseVehicle(1L)
+            );
+
+            // Assert
+            assertEquals("Vehicle not found", exception.getMessage());
+        }
 }

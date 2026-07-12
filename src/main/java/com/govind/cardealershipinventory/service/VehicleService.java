@@ -121,4 +121,9 @@ public class VehicleService {
         validateVehicleExists(id);
         vehicleRepository.deleteById(id);
     }
+
+	public Vehicle purchaseVehicle(long l) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
