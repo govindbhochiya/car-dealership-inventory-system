@@ -1,6 +1,7 @@
 package com.govind.cardealershipinventory.service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -58,4 +59,9 @@ public class VehicleService {
             throw new RuntimeException("Quantity cannot be negative");
         }
     }
+
+	public List<Vehicle> getAllVehicles() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

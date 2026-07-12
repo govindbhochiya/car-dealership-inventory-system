@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -158,5 +160,34 @@ class VehicleServiceTest {
 
         // Assert
         assertEquals("Quantity is required", exception.getMessage());
+    }
+    //helper
+    private Vehicle createVehicle(String make, String model) {
+        Vehicle vehicle = new Vehicle();
+        vehicle.setMake(make);
+        vehicle.setModel(model);
+        return vehicle;
+    }
+    @Test
+    void shouldReturnAllAvailableVehicles() {
+    	List<Vehicle> vehicles = new ArrayList<>();
+    	vehicles.add(createVehicle("Toyota", "Camry"));
+    	vehicles.add(createVehicle("Honda", "City"));
+
+    	when(vehicleRepository.findAll()).thenReturn(vehicles);
+
+        List<Vehicle> result = vehicleService.getAllVehicles();
+
+        assertEquals(2, result.size());
+        verify(vehicleRepository).findAll();
+    }
+    @Test
+    void shouldReturnEmptyListWhenNoVehiclesExist() {
+        when(vehicleRepository.findAll()).thenReturn(Collections.emptyList());
+
+        List<Vehicle> result = vehicleService.getAllVehicles();
+
+        assertTrue(result.isEmpty());
+        verify(vehicleRepository).findAll();
     }
 }
